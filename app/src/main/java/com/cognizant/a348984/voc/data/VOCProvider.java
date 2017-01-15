@@ -1,4 +1,4 @@
-package com.cognizant.a348984.voc.appathon.data;
+package com.cognizant.a348984.voc.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -6,10 +6,12 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.cognizant.a348984.voc.appathon.data.VOCContract.*;
+import com.cognizant.a348984.voc.data.VOCContract.CategoryEntry;
+import com.cognizant.a348984.voc.data.VOCContract.LoginEntry;
+import com.cognizant.a348984.voc.data.VOCContract.ProgressEntry;
+import com.cognizant.a348984.voc.data.VOCContract.QuestionsEntry;
 
 /**
  * Created by 348984 on 1/12/2017.
@@ -177,39 +179,30 @@ public class VOCProvider extends ContentProvider {
                 }
                 break;
             }
-            case MOVIE_DETAILS_POPULAR: {
-                long _id = db.insert(MoviePopularEntry.TABLE_NAME, null, values);
+            case CATEGORY_ALL: {
+                long _id = db.insert(CategoryEntry.TABLE_NAME, null, values);
                 if (_id > 0) {
-                    returnUri = MoviePopularEntry.buildMoviePopularUri(_id);
+                    returnUri = CategoryEntry.buildCategoryUri(_id);
                 } else {
-                    throw new android.database.SQLException("Failed to insert into Movie Popular table " + uri);
+                    throw new android.database.SQLException("Failed to insert into Category table " + uri);
                 }
                 break;
             }
-            case MOVIE_DETAILS_TOP_RATED: {
-                long _id = db.insert(MovieTopRatedEntry.TABLE_NAME, null, values);
+            case QUESTIONS_ALL: {
+                long _id = db.insert(QuestionsEntry.TABLE_NAME, null, values);
                 if (_id > 0) {
-                    returnUri = MovieTopRatedEntry.buildMovieTopRatedUri(_id);
+                    returnUri = QuestionsEntry.buildQuestionUri(_id);
                 } else {
-                    throw new android.database.SQLException("Failed to insert into Movie Top rated table " + uri);
+                    throw new android.database.SQLException("Failed to insert into Questions table " + uri);
                 }
                 break;
             }
-            case MOVIE_TRAILERS: {
-                long _id = db.insert(MovieTrailersEntry.TABLE_NAME, null, values);
+            case PROGRESS_ALL: {
+                long _id = db.insert(ProgressEntry.TABLE_NAME, null, values);
                 if (_id != 0) {
-                    returnUri = MovieTrailersEntry.buildMovieTrailerUri(_id);
+                    returnUri = ProgressEntry.buildProgressUri(_id);
                 } else {
-                    throw new android.database.SQLException("Failed to insert into Movie Trailers table " + uri);
-                }
-                break;
-            }
-            case MOVIE_REVIEWS: {
-                long _id = db.insert(MovieReviewsEntry.TABLE_NAME, null, values);
-                if (_id != 0) {
-                    returnUri = MovieReviewsEntry.buildMovieReviewUri(_id);
-                } else {
-                    throw new android.database.SQLException("Failed to insert into Movie Reviews table " + uri);
+                    throw new android.database.SQLException("Failed to insert into Progress table " + uri);
                 }
                 break;
             }
@@ -226,24 +219,20 @@ public class VOCProvider extends ContentProvider {
         int returnRows;
 
         switch (matcher.match(uri)){
-            case MOVIE_DETAILS_ALL: {
-                returnRows = db.delete(MovieDetailsEntry.TABLE_NAME,selection,selectionArgs);
+            case LOGIN_ALL: {
+                returnRows = db.delete(LoginEntry.TABLE_NAME,selection,selectionArgs);
                 break;
             }
-            case MOVIE_DETAILS_POPULAR: {
-                returnRows = db.delete(MoviePopularEntry.TABLE_NAME,selection,selectionArgs);
+            case CATEGORY_ALL: {
+                returnRows = db.delete(CategoryEntry.TABLE_NAME,selection,selectionArgs);
                 break;
             }
-            case MOVIE_DETAILS_TOP_RATED: {
-                returnRows = db.delete(MovieTopRatedEntry.TABLE_NAME,selection,selectionArgs);
+            case QUESTIONS_ALL: {
+                returnRows = db.delete(QuestionsEntry.TABLE_NAME,selection,selectionArgs);
                 break;
             }
-            case MOVIE_TRAILERS: {
-                returnRows = db.delete(MovieTrailersEntry.TABLE_NAME,selection,selectionArgs);
-                break;
-            }
-            case MOVIE_REVIEWS: {
-                returnRows = db.delete(MovieReviewsEntry.TABLE_NAME,selection,selectionArgs);
+            case PROGRESS_ALL: {
+                returnRows = db.delete(ProgressEntry.TABLE_NAME,selection,selectionArgs);
                 break;
             }
             default:
@@ -260,30 +249,22 @@ public class VOCProvider extends ContentProvider {
         int returnRows;
 
         switch (matcher.match(uri)){
-            case MOVIE_DETAILS_ALL: {
-                returnRows = db.update(MovieDetailsEntry.TABLE_NAME,values,selection,selectionArgs);
+            case LOGIN_WITH_EMAIL: {
+                String emailId = LoginEntry.getEmailIdFromUri(uri);
+                returnRows = db.update(LoginEntry.TABLE_NAME,values,LoginEntry.COLUMN_EMAIL + "= ?",
+                        new String[]{emailId});
                 break;
             }
-            case MOVIE_DETAILS: {
-                String movieId = MovieDetailsEntry.getMovieIdFromUri(uri);
-                returnRows = db.update(MovieDetailsEntry.TABLE_NAME,values,MovieDetailsEntry.COLUMN_MOVIE_ID + "= ?",
-                        new String[]{movieId});
+            case CATEGORY_ALL: {
+                returnRows = db.update(CategoryEntry.TABLE_NAME,values,selection,selectionArgs);
                 break;
             }
-            case MOVIE_DETAILS_POPULAR: {
-                returnRows = db.update(MoviePopularEntry.TABLE_NAME,values,selection,selectionArgs);
+            case QUESTIONS_ALL: {
+                returnRows = db.update(QuestionsEntry.TABLE_NAME,values,selection,selectionArgs);
                 break;
             }
-            case MOVIE_DETAILS_TOP_RATED: {
-                returnRows = db.update(MovieTopRatedEntry.TABLE_NAME,values,selection,selectionArgs);
-                break;
-            }
-            case MOVIE_TRAILERS: {
-                returnRows = db.update(MovieTrailersEntry.TABLE_NAME,values,selection,selectionArgs);
-                break;
-            }
-            case MOVIE_REVIEWS: {
-                returnRows = db.update(MovieReviewsEntry.TABLE_NAME,values,selection,selectionArgs);
+            case PROGRESS_ALL: {
+                returnRows = db.update(ProgressEntry.TABLE_NAME,values,selection,selectionArgs);
                 break;
             }
             default:

@@ -1,9 +1,9 @@
-package com.cognizant.a348984.voc.appathon.data;
+package com.cognizant.a348984.voc.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.cognizant.a348984.voc.appathon.data.VOCContract.*;
+import com.cognizant.a348984.voc.data.VOCContract.*;
 
 /**
  * Created by 348984 on 1/12/2017.

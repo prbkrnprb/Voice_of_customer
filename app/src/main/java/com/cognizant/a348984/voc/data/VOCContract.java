@@ -1,4 +1,4 @@
-package com.cognizant.a348984.voc.appathon.data;
+package com.cognizant.a348984.voc.data;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
